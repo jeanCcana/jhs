@@ -2,7 +2,6 @@ import React, { useMemo, useState } from 'react'
 import { Layout } from 'antd'
 import { TeamOutlined, UserOutlined } from '@ant-design/icons'
 import { MyFooter } from '../components/ui/MyFooter'
-
 import { DashboardHeader } from '../components/ui/DashboardHeader'
 import { DashboardSider } from '../components/ui/DashboardSider'
 import { DashboardContent } from '../components/ui/DashboardContent'
@@ -10,6 +9,7 @@ import { Categories } from '../components/cruds/Categories'
 import { Articles } from '../components/cruds/Articles'
 import { Suppliers } from '../components/cruds/Suppliers'
 import { Products } from '../components/cruds/Products/Products'
+import { SubArticles } from '../components/cruds/SubArticles'
 
 export const DashboardRoutes = () => {
   const [collapsed, setCollapsed] = useState(false)
@@ -17,15 +17,15 @@ export const DashboardRoutes = () => {
   const items = useMemo(
     () => [
       {
-        title: 'Grupo 1',
-        key: 'Group1',
+        title: 'Submenu 1',
+        key: 'Submenu1',
         icon: <UserOutlined />,
         submenu: [
           {
             title: 'Productos',
             path: '/productos',
-            render: (props) => <Products {...props} />,
-            exact: false,
+            render: () => <Products />,
+            exact: true,
           },
           {
             title: 'Articulos',
@@ -36,14 +36,14 @@ export const DashboardRoutes = () => {
           {
             title: 'SubArticulos',
             path: '/subarticulos',
-            render: () => <h1>SubArticulos</h1>,
+            render: () => <SubArticles />,
             exact: true,
           },
         ],
       },
       {
-        title: 'Grupo 2',
-        key: 'Group2',
+        title: 'Submenu 2',
+        key: 'Submenu2',
         icon: <TeamOutlined />,
         submenu: [
           {

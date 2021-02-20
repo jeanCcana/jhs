@@ -30,7 +30,13 @@ const MyHeader = styled(PageHeader)`
   }
 `
 
-export const DashboardTable = ({ title, rowKey, columns, endpoint }) => {
+export const DashboardTable = ({
+  title,
+  rowKey,
+  columns,
+  actions,
+  endpoint,
+}) => {
   const [dialogForm] = Form.useForm()
   const {
     user: { roles },
@@ -164,6 +170,7 @@ export const DashboardTable = ({ title, rowKey, columns, endpoint }) => {
       width: 100,
       render: (_, row) => (
         <Space size="large">
+          {actions && actions.map((action) => action.render(row, isAdmin))}
           <Tooltip title="Editar">
             <EditFilled
               className={`text-lg ${
@@ -275,5 +282,6 @@ DashboardTable.propTypes = {
   title: PropTypes.string.isRequired,
   rowKey: PropTypes.string.isRequired,
   columns: PropTypes.array.isRequired,
+  actions: PropTypes.array,
   endpoint: PropTypes.string.isRequired,
 }

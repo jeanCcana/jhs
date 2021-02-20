@@ -1,40 +1,147 @@
-import React, { useState } from 'react'
-import { Menu } from 'antd'
-import PropTypes from 'prop-types'
-import { Link, Redirect, Route, Switch } from 'react-router-dom'
-import { ProductsTable } from './ProductsTable'
-import { ProductsRelation } from './ProductsRelation'
+/* eslint-disable no-unused-vars */
+import React, { useEffect, useState } from 'react'
+import { Select, Tooltip } from 'antd'
+import { ApartmentOutlined } from '@ant-design/icons'
+import { createTokenAxiosInstance } from '../../../services/api'
+import { DashboardTable } from '../../ui/DashboardTable'
+import { RelationModal } from './RelationModal'
 
-const { Item } = Menu
+export const Products = () => {
+  const [suppliers, setSuppliers] = React.useState([])
+  const [categories, setCategories] = React.useState([])
+  const [dialogState, setDialogState] = useState({
+    id: 0,
+    title: '. . .',
+    visible: false,
+  })
 
-export const Products = ({ match: { url, path } }) => {
-  const [currentKey, setCurrentKey] = useState('datos')
-
-  const handleClick = (e) => {
-    setCurrentKey(e.key)
+  const openRelationDialog = (row) => {
+    const { id, name } = row
+    setDialogState({
+      id,
+      title: name,
+      visible: true,
+    })
   }
+
+  const closeRelationDialog = () => {
+    setDialogState((state) => ({ ...state, visible: false }))
+  }
+
+  const columns = [
+    {
+      title: 'Código',
+      dataIndex: 'code',
+    },
+    {
+      title: 'Nombre',
+      dataIndex: 'name',
+    },
+    {
+      title: 'Proveedor',
+      dataIndex: 'supplierId',
+      rules: [
+        {
+          type: 'integer',
+          required: true,
+          whitespace: true,
+        },
+      ],
+      render: (value) => {
+        const supplier = suppliers.find((suppl) => suppl.id === value)
+        return supplier ? supplier.name : ''
+      },
+      editRender: () => (
+        <Select placeholder="Seleccione un proveedor">
+          {suppliers.map((supplier) => (
+            <Select.Option key={supplier.id} value={supplier.id}>
+              {supplier.name}
+            </Select.Option>
+          ))}
+        </Select>
+      ),
+    },
+    {
+      title: 'Categoría',
+      dataIndex: 'categoryId',
+      rules: [
+        {
+          type: 'integer',
+          required: true,
+          whitespace: true,
+        },
+      ],
+      render: (value) => {
+        const category = categories.find((categ) => categ.id === value)
+        return category ? category.name : ''
+      },
+      editRender: () => (
+        <Select placeholder="Seleccione una categoría">
+          {categories.map((category) => (
+            <Select.Option key={category.id} value={category.id}>
+              {category.name}
+            </Select.Option>
+          ))}
+        </Select>
+      ),
+    },
+  ]
+
+  const actions = [
+    {
+      render: (row, isAdmin) => (
+        <Tooltip key="Relation" title="Relacionar">
+          <ApartmentOutlined
+            className={`text-lg ${
+              !isAdmin && 'cursor-not-allowed text-gray-300	'
+            }`}
+            onClick={
+              isAdmin
+                ? () => {
+                    openRelationDialog(row)
+                  }
+                : undefined
+            }
+          />
+        </Tooltip>
+      ),
+    },
+  ]
+
+  useEffect(() => {
+    async function fetchSuppliersAndCategories() {
+      const tokenAxios = createTokenAxiosInstance()
+
+      setSuppliers(
+        await tokenAxios
+          .get('suppliers?isState=false')
+          .then((resp) => resp.data),
+      )
+
+      setCategories(
+        await tokenAxios
+          .get('categories?isState=false')
+          .then((resp) => resp.data),
+      )
+    }
+    fetchSuppliersAndCategories()
+  }, [])
 
   return (
     <>
-      <Menu onClick={handleClick} selectedKeys={[currentKey]} mode="horizontal">
-        <Item key="datos">
-          <Link to={`${url}/datos`}>Datos</Link>
-        </Item>
-        <Item key="relacion">
-          <Link to={`${url}/relacion`}>Relacion</Link>
-        </Item>
-      </Menu>
-      <Switch>
-        <Route path={`${path}/datos`} render={() => <ProductsTable />} />
-        <Route path={`${path}/relacion`} render={() => <ProductsRelation />} />
-        <Redirect to={`${path}/datos`} />
-      </Switch>
+      <DashboardTable
+        title="Productos"
+        rowKey="id"
+        columns={columns}
+        actions={actions}
+        endpoint="products"
+      />
+      <RelationModal
+        id={dialogState.id}
+        title={dialogState.title}
+        visible={dialogState.visible}
+        onCancel={closeRelationDialog}
+      />
     </>
   )
-}
-
-Products.propTypes = {
-  match: PropTypes.any.isRequired,
-  url: PropTypes.string.isRequired,
-  path: PropTypes.string.isRequired,
 }
