@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Modal, Spin } from 'antd'
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
@@ -7,7 +8,7 @@ export const RelationModal = ({ id, title, visible, onCancel }) => {
   const getArticles = () => {
     const tokenAxios = createTokenAxiosInstance()
     tokenAxios.get(`products/articles/0/${id}`).then((resp) => {
-      console.log(resp)
+      // console.log(resp)
     })
   }
 

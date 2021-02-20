@@ -20,8 +20,11 @@ const MyDrawer = styled(Drawer)`
   }
 `
 const Logo = styled.div`
+  display: flex;
+  justify-content: center;
   height: 32px;
   margin: 16px;
+  padding: 4px;
   background: rgba(255, 255, 255, 0.3);
 `
 export const DashboardSider = ({ items, collapsed, setCollapsed }) => {
@@ -46,10 +49,16 @@ export const DashboardSider = ({ items, collapsed, setCollapsed }) => {
     />
   )
 
+  const LogoJHS = () => (
+    <Logo>
+      <img className="h-full" src="/assets/logow2.png" alt="logo" />
+    </Logo>
+  )
+
   return (
     <>
       <FixedSider trigger={null} collapsed={collapsed} hidden={!brkPnt.lg}>
-        <Logo />
+        <LogoJHS />
         <Menu />
       </FixedSider>
       <MyDrawer
@@ -59,7 +68,7 @@ export const DashboardSider = ({ items, collapsed, setCollapsed }) => {
         onClose={() => setCollapsed(true)}
         visible={!brkPnt.lg && !collapsed}
       >
-        <Logo />
+        <LogoJHS />
         <Menu />
       </MyDrawer>
     </>

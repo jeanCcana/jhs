@@ -40,7 +40,12 @@ export const LoginScreen = () => {
         </div>
 
         <div className="flex-1 flex flex-col justify-center px-8 md:px-24 lg:px-32">
-          <Form name="login" className="login-form" onFinish={handleLogin}>
+          <Form
+            name="login"
+            autoComplete="off"
+            className="login-form"
+            onFinish={handleLogin}
+          >
             <Form.Item
               name="username"
               rules={[{ required: true, message: 'Ingrese el usuario' }]}

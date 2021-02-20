@@ -56,7 +56,7 @@ export const DashboardHeader = ({ collapsed, toggle }) => {
       ]}
     >
       <Space size={2} direction="vertical" align="center">
-        <Avatar className="bg-red-500 my-2 flex items-center" size={60}>
+        <Avatar className="bg-red-400 my-2 flex items-center" size={60}>
           <div className="text-4xl ">{nombre.charAt(0).toUpperCase()}</div>
         </Avatar>
         <Typography.Text className="text-sm">{`${nombre} ${apellido}`}</Typography.Text>
@@ -87,7 +87,7 @@ export const DashboardHeader = ({ collapsed, toggle }) => {
           trigger="click"
         >
           <Avatar
-            className="cursor-pointer bg-red-500 align-middle"
+            className="cursor-pointer bg-red-400 align-middle"
             size="default"
           >
             {nombre.charAt(0).toUpperCase()}

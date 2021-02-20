@@ -2,17 +2,23 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { useEffect, useState } from 'react'
 import ImgsViewer from 'react-images-viewer'
-import { Button, Select, Space, Upload } from 'antd'
-import { UploadOutlined } from '@ant-design/icons'
+import { Button, Select, Space, Tooltip, Upload } from 'antd'
+import { ApartmentOutlined, UploadOutlined } from '@ant-design/icons'
 import { createTokenAxiosInstance } from '../../services/api'
 import { MyInputNumber } from '../ui/MyInputNumber'
 import { DashboardTable } from '../ui/DashboardTable'
+import { RelationModal } from './Products/RelationModal'
 
 export const Articles = () => {
   const [suppliers, setSuppliers] = React.useState([])
   const [categories, setCategories] = React.useState([])
   const [image, setimage] = useState([])
   const [openImageViewer, setOpenImageViewer] = useState(false)
+  const [dialogState, setDialogState] = useState({
+    id: 0,
+    title: '. . .',
+    visible: false,
+  })
 
   const viewImage = (url, name) => {
     setimage([
@@ -22,6 +28,19 @@ export const Articles = () => {
       },
     ])
     setOpenImageViewer(true)
+  }
+
+  const openRelationDialog = (row) => {
+    const { id, name } = row
+    setDialogState({
+      id,
+      title: name,
+      visible: true,
+    })
+  }
+
+  const closeRelationDialog = () => {
+    setDialogState((state) => ({ ...state, visible: false }))
   }
 
   const columns = [
@@ -160,6 +179,27 @@ export const Articles = () => {
     },
   ]
 
+  const actions = [
+    {
+      render: (row, isAdmin) => (
+        <Tooltip key="Relation" title="Relacionar">
+          <ApartmentOutlined
+            className={`text-lg ${
+              !isAdmin && 'cursor-not-allowed text-gray-300	'
+            }`}
+            onClick={
+              isAdmin
+                ? () => {
+                    openRelationDialog(row)
+                  }
+                : undefined
+            }
+          />
+        </Tooltip>
+      ),
+    },
+  ]
+
   useEffect(() => {
     async function fetchSuppliersAndCategories() {
       const tokenAxios = createTokenAxiosInstance()
@@ -184,6 +224,7 @@ export const Articles = () => {
       <DashboardTable
         title="Articulos"
         rowKey="id"
+        actions={actions}
         columns={columns}
         endpoint="articles"
       />
@@ -196,6 +237,12 @@ export const Articles = () => {
         onClose={() => {
           setOpenImageViewer(false)
         }}
+      />
+      <RelationModal
+        id={dialogState.id}
+        title={dialogState.title}
+        visible={dialogState.visible}
+        onCancel={closeRelationDialog}
       />
     </>
   )
