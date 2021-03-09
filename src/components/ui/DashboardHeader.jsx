@@ -75,25 +75,28 @@ export const DashboardHeader = ({ collapsed, toggle }) => {
   )
 
   return (
-    <Layout.Header className="bg-white p-0 flex items-center justify-between">
+    <Layout.Header
+      className="bg-white p-0 flex items-center justify-between shadow-sm"
+      style={{ position: 'sticky', top: 0, zIndex: 3, width: '100%' }}
+    >
       <Trigger onClick={toggle}>
         {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
       </Trigger>
-      <div className="px-6 h-full flex items-center">
-        <Popover
-          overlayClassName="popover-nopadding"
-          content={content}
-          placement="bottomRight"
-          trigger="click"
+
+      <Popover
+        overlayClassName="popover-nopadding"
+        className="mx-6"
+        content={content}
+        placement="bottomRight"
+        trigger="click"
+      >
+        <Avatar
+          className="cursor-pointer bg-red-400 align-middle"
+          size="default"
         >
-          <Avatar
-            className="cursor-pointer bg-red-400 align-middle"
-            size="default"
-          >
-            {nombre.charAt(0).toUpperCase()}
-          </Avatar>
-        </Popover>
-      </div>
+          {nombre.charAt(0).toUpperCase()}
+        </Avatar>
+      </Popover>
     </Layout.Header>
   )
 }
