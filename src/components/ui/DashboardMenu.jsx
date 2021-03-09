@@ -22,21 +22,8 @@ export const DashboardMenu = ({ items, collapse }) => {
       </Item>
     )
 
-  const getSelectedGroup = () => {
-    const groupItems = items.filter((i) => i.submenu)
-    const selectGroup = groupItems.find((i) =>
-      i.submenu.find((submenuI) => submenuI.path === path),
-    )
-    return selectGroup
-  }
-
   return (
-    <Menu
-      theme="dark"
-      mode="inline"
-      defaultSelectedKeys={[path]}
-      defaultOpenKeys={getSelectedGroup() && [getSelectedGroup().key]}
-    >
+    <Menu theme="dark" mode="inline" defaultSelectedKeys={[path]}>
       {items.map(renderItems)}
     </Menu>
   )
