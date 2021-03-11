@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from 'react'
 import { Select, Tooltip } from 'antd'
 import { ApartmentOutlined } from '@ant-design/icons'
-import { createTokenAxiosInstance } from '../../../services/api'
-import { DashboardTable } from '../../ui/DashboardTable'
+import { createTokenAxiosInstance } from '../../services/api'
+import { DashboardTable } from '../ui/DashboardTable'
 import { RelationModal } from './RelationModal'
 
 export const Products = () => {

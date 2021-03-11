@@ -7,7 +7,7 @@ import { ApartmentOutlined, UploadOutlined } from '@ant-design/icons'
 import { createTokenAxiosInstance } from '../../services/api'
 import { MyInputNumber } from '../ui/MyInputNumber'
 import { DashboardTable } from '../ui/DashboardTable'
-import { RelationModal } from './Products/RelationModal'
+import { RelationModal } from './RelationModal'
 
 export const Articles = () => {
   const [suppliers, setSuppliers] = React.useState([])

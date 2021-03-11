@@ -8,7 +8,7 @@ import { DashboardContent } from '../components/ui/DashboardContent'
 import { Categories } from '../components/cruds/Categories'
 import { Articles } from '../components/cruds/Articles'
 import { Suppliers } from '../components/cruds/Suppliers'
-import { Products } from '../components/cruds/Products/Products'
+import { Products } from '../components/cruds/Products'
 import { SubArticles } from '../components/cruds/SubArticles'
 
 export const DashboardRoutes = () => {
