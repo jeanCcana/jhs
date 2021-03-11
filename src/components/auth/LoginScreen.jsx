@@ -23,6 +23,12 @@ const StyledButton = styled(Button)`
     border-color: #505291;
   }
 `
+const Background = styled.div`
+  background-image: url('assets/loginbg.jpg'),
+    linear-gradient(to top left, #7f7fd5, #86a8e7, #91eae4);
+  background-blend-mode: multiply;
+  background-size: cover;
+`
 
 export const LoginScreen = () => {
   const dispatch = useDispatch()
@@ -84,13 +90,13 @@ export const LoginScreen = () => {
         </div>
         <MyFooter className="bg-white pt-12 pb-12" />
       </div>
-      <div className="bg-gradient-to-r from-blue-800 to-blue-300 w-1/2 hidden md:block">
-        <img
+      <Background className="w-1/2 hidden md:block">
+        {/* <img
           alt="bgimage"
-          className="object-cover w-full h-screen opacity-50"
+          className="object-cover w-full h-screen"
           src="/assets/loginbg.jpg"
-        />
-      </div>
+        /> */}
+      </Background>
     </div>
   )
 }
