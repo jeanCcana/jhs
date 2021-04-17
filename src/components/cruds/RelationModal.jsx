@@ -23,7 +23,7 @@ export const RelationModal = ({ id, title, visible, onCancel }) => {
 
   return (
     <Modal visible={visible} onCancel={onCancel} footer={null}>
-      <List
+      {/* <List
         size="small"
         header={
           <div>
@@ -35,10 +35,10 @@ export const RelationModal = ({ id, title, visible, onCancel }) => {
         bordered
         dataSource={data}
         renderItem={(item) => <List.Item>{item.articleName}</List.Item>}
-      />
-      {/* <div className="flex items-center justify-center h-56">
+      /> */}
+      <div className="flex items-center justify-center h-56">
         <Spin />
-      </div> */}
+      </div>
     </Modal>
   )
 }
