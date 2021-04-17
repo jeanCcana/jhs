@@ -80,7 +80,7 @@ export const DashboardTable = ({
 
     dynanmicAxiosInst
       .then(({ data: remoteData }) => {
-        console.log(remoteData.content)
+        // console.log(remoteData.content)
         setTabledata((state) => ({
           ...state,
           data: remoteData.content,
@@ -132,7 +132,7 @@ export const DashboardTable = ({
         dialogForm.resetFields()
       })
       .catch((error) => {
-        console.error(error)
+        // console.error(error)
         if (error.response) {
           message.error(error.response.data.mensaje)
         }

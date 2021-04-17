@@ -11,7 +11,7 @@ export const RelationModal = ({ id, title, visible, onCancel }) => {
     const tokenAxios = createTokenAxiosInstance()
     tokenAxios.get(`products/articles/0/${id}`).then((resp) => {
       setData(resp.data.content)
-      console.log(resp)
+      // console.log(resp)
     })
   }
 
