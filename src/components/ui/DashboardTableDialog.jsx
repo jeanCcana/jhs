@@ -1,6 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Form, Input, Modal } from 'antd'
+import styled from 'styled-components'
+
+const StyledModal = styled(Modal)`
+  .ant-modal-body {
+    max-height: calc(100vh - 210px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+`
 
 export const DashboardTableDialog = ({
   formInst,
@@ -26,7 +35,8 @@ export const DashboardTableDialog = ({
   ]
 
   return (
-    <Modal
+    <StyledModal
+      centered
       visible={visible}
       title={title}
       onCancel={() => {
@@ -64,7 +74,7 @@ export const DashboardTableDialog = ({
           </Form.Item>
         ))}
       </Form>
-    </Modal>
+    </StyledModal>
   )
 }
 

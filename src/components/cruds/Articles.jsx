@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { useEffect, useState } from 'react'
@@ -8,6 +9,7 @@ import { createTokenAxiosInstance } from '../../services/api'
 import { MyInputNumber } from '../ui/MyInputNumber'
 import { DashboardTable } from '../ui/DashboardTable'
 import { RelationModal } from './RelationModal'
+import { UploadComponent } from '../ui/UploadComponent'
 
 export const Articles = () => {
   const [suppliers, setSuppliers] = React.useState([])
@@ -19,6 +21,7 @@ export const Articles = () => {
     title: '. . .',
     visible: false,
   })
+  const tokenAxios = createTokenAxiosInstance()
 
   const viewImage = (url, name) => {
     setimage([
@@ -67,27 +70,7 @@ export const Articles = () => {
           />
         )
       },
-      editRender: (value) => {
-        const validImg = value !== ''
-        return (
-          <Space size="middle">
-            <img
-              alt="img"
-              src={
-                validImg
-                  ? `https://api-jhs.herokuapp.com/api/uploads/img/${value}`
-                  : '/assets/no-image.png'
-              }
-              className="w-32 border-dashed border-2 p-2"
-            />
-            <Upload listType="picture" maxCount={1}>
-              <Button className="flex items-center" icon={<UploadOutlined />}>
-                Cargar imagen
-              </Button>
-            </Upload>
-          </Space>
-        )
-      },
+      editRender: () => <UploadComponent />,
     },
     {
       title: 'Nombre',
@@ -202,8 +185,6 @@ export const Articles = () => {
 
   useEffect(() => {
     async function fetchSuppliersAndCategories() {
-      const tokenAxios = createTokenAxiosInstance()
-
       setSuppliers(
         await tokenAxios
           .get('suppliers?isState=false')
@@ -211,9 +192,7 @@ export const Articles = () => {
       )
 
       setCategories(
-        await tokenAxios
-          .get('categories?isState=false')
-          .then((resp) => resp.data),
+        await tokenAxios.get('categories?type=1').then((resp) => resp.data),
       )
     }
     fetchSuppliersAndCategories()
@@ -227,6 +206,24 @@ export const Articles = () => {
         actions={actions}
         columns={columns}
         endpoint="articles"
+        onAccept={async (values, addMode) => {
+          try {
+            const dynanmicAxiosInst = addMode
+              ? tokenAxios.post('/articles', values)
+              : tokenAxios.put(`/articles/${values.id}`, values)
+            const resp = await dynanmicAxiosInst
+            const { id } = resp.data.article
+            if (values.url && values.url.file) {
+              const formData = new FormData()
+              formData.append('archivo', values.url.file)
+              formData.append('id', id)
+              await tokenAxios.post('/articles/upload', formData)
+            }
+            return resp
+          } catch (e) {
+            throw new Error(e)
+          }
+        }}
       />
       <ImgsViewer
         imgs={image}

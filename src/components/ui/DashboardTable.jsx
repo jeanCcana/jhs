@@ -36,6 +36,7 @@ export const DashboardTable = ({
   columns,
   actions,
   endpoint,
+  onAccept,
 }) => {
   const [dialogForm] = Form.useForm()
   const {
@@ -78,14 +79,15 @@ export const DashboardTable = ({
     setTabledata((state) => ({ ...state, loading: true }))
 
     dynanmicAxiosInst
-      .then(({ data: remoteData }) =>
+      .then(({ data: remoteData }) => {
+        console.log(remoteData.content)
         setTabledata((state) => ({
           ...state,
           data: remoteData.content,
           total: remoteData.totalElements,
           loading: false,
-        })),
-      )
+        }))
+      })
       .catch((e) => {
         setTabledata((state) => ({ ...state, loading: false }))
         message.error(e)
@@ -114,11 +116,14 @@ export const DashboardTable = ({
   const onDialogAccept = (values) => {
     const tokenAxios = createTokenAxiosInstance()
 
-    const dynanmicAxiosInst = addMode
-      ? tokenAxios.post(`/${endpoint}`, values)
-      : tokenAxios.put(`/${endpoint}/${values.id}`, values)
+    const action = onAccept
+      ? () => onAccept(values, addMode)
+      : () =>
+          addMode
+            ? tokenAxios.post(`/${endpoint}`, values)
+            : tokenAxios.put(`/${endpoint}/${values.id}`, values)
 
-    dynanmicAxiosInst
+    action()
       .then((resp) => {
         setDialogState((state) => ({ ...state, visible: false }))
 
@@ -127,6 +132,7 @@ export const DashboardTable = ({
         dialogForm.resetFields()
       })
       .catch((error) => {
+        console.error(error)
         if (error.response) {
           message.error(error.response.data.mensaje)
         }
@@ -284,4 +290,5 @@ DashboardTable.propTypes = {
   columns: PropTypes.array.isRequired,
   actions: PropTypes.array,
   endpoint: PropTypes.string.isRequired,
+  onAccept: PropTypes.func,
 }

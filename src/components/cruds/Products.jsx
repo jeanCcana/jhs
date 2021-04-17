@@ -119,9 +119,7 @@ export const Products = () => {
       )
 
       setCategories(
-        await tokenAxios
-          .get('categories?isState=false')
-          .then((resp) => resp.data),
+        await tokenAxios.get('categories?type=0').then((resp) => resp.data),
       )
     }
     fetchSuppliersAndCategories()

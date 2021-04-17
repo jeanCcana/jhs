@@ -4,15 +4,15 @@ import { DashboardTable } from '../ui/DashboardTable'
 
 const types = [
   {
-    id: 1,
+    id: 0,
     name: 'Productos',
   },
   {
-    id: 2,
+    id: 1,
     name: 'Articulos',
   },
   {
-    id: 3,
+    id: 2,
     name: 'Subarticulos',
   },
 ]
