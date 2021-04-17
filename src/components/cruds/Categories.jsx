@@ -32,7 +32,7 @@ const columns = [
     rules: [
       {
         type: 'enum',
-        enum: [1, 2, 3],
+        enum: [0, 1, 2],
         required: true,
         whitespace: true,
       },

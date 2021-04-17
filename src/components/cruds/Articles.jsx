@@ -122,10 +122,7 @@ export const Articles = () => {
           whitespace: true,
         },
       ],
-      render: (value) => {
-        const supplier = suppliers.find((suppl) => suppl.id === value)
-        return supplier ? supplier.name : ''
-      },
+      render: (_, row) => row.supplierName,
       editRender: () => (
         <Select placeholder="Seleccione un proveedor">
           {suppliers.map((supplier) => (
@@ -146,10 +143,7 @@ export const Articles = () => {
           whitespace: true,
         },
       ],
-      render: (value) => {
-        const category = categories.find((categ) => categ.id === value)
-        return category ? category.name : ''
-      },
+      render: (_, row) => row.categoryName,
       editRender: () => (
         <Select placeholder="Seleccione una categoría">
           {categories.map((category) => (
