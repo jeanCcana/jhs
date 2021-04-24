@@ -1,19 +1,18 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { useEffect, useState } from 'react'
 import ImgsViewer from 'react-images-viewer'
-import { Button, Select, Space, Tooltip, Upload } from 'antd'
-import { ApartmentOutlined, UploadOutlined } from '@ant-design/icons'
+import { Select, Tooltip } from 'antd'
+import { ApartmentOutlined } from '@ant-design/icons'
 import { createTokenAxiosInstance } from '../../services/api'
 import { MyInputNumber } from '../ui/MyInputNumber'
 import { DashboardTable } from '../ui/DashboardTable'
-import { RelationModal } from './RelationModal'
 import { UploadComponent } from '../ui/UploadComponent'
+import { ArticlesSubArticles } from './ArticlesSubArticles'
+import { SelectPag } from '../ui/SelectPag'
 
 export const Articles = () => {
   const [suppliers, setSuppliers] = React.useState([])
-  const [categories, setCategories] = React.useState([])
   const [image, setimage] = useState([])
   const [openImageViewer, setOpenImageViewer] = useState(false)
   const [dialogState, setDialogState] = useState({
@@ -105,14 +104,7 @@ export const Articles = () => {
       ],
       render: (value) =>
         `S/.${value ? (Math.round(value * 100) / 100).toFixed(2) : 0}`,
-      editRender: () => (
-        <MyInputNumber
-        // formatter={(value) =>
-        //   `S ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-        // }
-        // parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
-        />
-      ),
+      editRender: () => <MyInputNumber />,
     },
     {
       title: 'Proveedor',
@@ -146,14 +138,15 @@ export const Articles = () => {
         },
       ],
       render: (_, row) => row.categoryName,
-      editRender: () => (
-        <Select placeholder="Seleccione una categoría">
-          {categories.map((category) => (
-            <Select.Option key={category.id} value={category.id}>
-              {category.name}
-            </Select.Option>
-          ))}
-        </Select>
+      editRender: (_, row) => (
+        <SelectPag
+          endpoint="categories/type/page"
+          params={{
+            type: 1,
+            size: 5,
+          }}
+          defaultName={row.categoryName || null}
+        />
       ),
     },
   ]
@@ -180,18 +173,14 @@ export const Articles = () => {
   ]
 
   useEffect(() => {
-    async function fetchSuppliersAndCategories() {
+    async function fetchSuppliers() {
       setSuppliers(
         await tokenAxios
           .get('suppliers?isState=false')
           .then((resp) => resp.data),
       )
-
-      setCategories(
-        await tokenAxios.get('categories?type=1').then((resp) => resp.data),
-      )
     }
-    fetchSuppliersAndCategories()
+    fetchSuppliers()
   }, [])
 
   return (
@@ -199,8 +188,8 @@ export const Articles = () => {
       <DashboardTable
         title="Articulos"
         rowKey="id"
-        actions={actions}
         columns={columns}
+        actions={actions}
         endpoint="articles"
         onAccept={async (values, addMode) => {
           try {
@@ -231,7 +220,7 @@ export const Articles = () => {
           setOpenImageViewer(false)
         }}
       />
-      <RelationModal
+      <ArticlesSubArticles
         id={dialogState.id}
         title={dialogState.title}
         visible={dialogState.visible}

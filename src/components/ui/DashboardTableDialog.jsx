@@ -67,7 +67,10 @@ export const DashboardTableDialog = ({
             rules={column.rules || defaultRules}
           >
             {column.editRender ? (
-              column.editRender(formInst.getFieldValue(column.dataIndex))
+              column.editRender(
+                formInst.getFieldValue(column.dataIndex),
+                formInst.getFieldsValue(true),
+              )
             ) : (
               <Input autoFocus={index === 0} />
             )}

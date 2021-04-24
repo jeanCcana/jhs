@@ -90,13 +90,7 @@ export const LoginScreen = () => {
         </div>
         <MyFooter className="bg-white pt-12 pb-12" />
       </div>
-      <Background className="w-1/2 hidden md:block">
-        {/* <img
-          alt="bgimage"
-          className="object-cover w-full h-screen"
-          src="/assets/loginbg.jpg"
-        /> */}
-      </Background>
+      <Background className="w-1/2 hidden md:block" />
     </div>
   )
 }

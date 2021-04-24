@@ -1,14 +1,11 @@
-/* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from 'react'
-import { Select, Tooltip } from 'antd'
-import { ApartmentOutlined } from '@ant-design/icons'
+import React, { useEffect } from 'react'
+import { Select } from 'antd'
 import { createTokenAxiosInstance } from '../../services/api'
 import { DashboardTable } from '../ui/DashboardTable'
-import { RelationModal } from './RelationModal'
+import { SelectPag } from '../ui/SelectPag'
 
 export const SubArticles = () => {
   const [suppliers, setSuppliers] = React.useState([])
-  const [categories, setCategories] = React.useState([])
 
   const columns = [
     {
@@ -18,6 +15,7 @@ export const SubArticles = () => {
     {
       title: 'Descripción',
       dataIndex: 'description',
+      hideEdit: true,
     },
     {
       title: 'Proveedor',
@@ -51,20 +49,21 @@ export const SubArticles = () => {
         },
       ],
       render: (_, row) => row.categoryName,
-      editRender: () => (
-        <Select placeholder="Seleccione una categoría">
-          {categories.map((category) => (
-            <Select.Option key={category.id} value={category.id}>
-              {category.name}
-            </Select.Option>
-          ))}
-        </Select>
+      editRender: (_, row) => (
+        <SelectPag
+          endpoint="categories/type/page"
+          params={{
+            type: 2,
+            size: 5,
+          }}
+          defaultName={row.categoryName || null}
+        />
       ),
     },
   ]
 
   useEffect(() => {
-    async function fetchSuppliersAndCategories() {
+    async function fetchSuppliers() {
       const tokenAxios = createTokenAxiosInstance()
 
       setSuppliers(
@@ -72,12 +71,8 @@ export const SubArticles = () => {
           .get('suppliers?isState=false')
           .then((resp) => resp.data),
       )
-
-      setCategories(
-        await tokenAxios.get('categories?type=2').then((resp) => resp.data),
-      )
     }
-    fetchSuppliersAndCategories()
+    fetchSuppliers()
   }, [])
 
   return (

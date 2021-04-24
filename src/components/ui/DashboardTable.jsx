@@ -22,6 +22,7 @@ const MyHeader = styled(PageHeader)`
   .ant-page-header-heading {
     display: initial;
     justify-content: initial;
+    width: 100%;
 
     @media (min-width: 576px) {
       display: flex;
@@ -36,6 +37,7 @@ export const DashboardTable = ({
   columns,
   actions,
   endpoint,
+  fetchUrl,
   onAccept,
 }) => {
   const [dialogForm] = Form.useForm()
@@ -64,12 +66,12 @@ export const DashboardTable = ({
     const tokenAxios = createTokenAxiosInstance()
     const dynanmicAxiosInst =
       searchValue === ''
-        ? tokenAxios.get(`${endpoint}/page/${page - 1}`, {
+        ? tokenAxios.get(`${fetchUrl || endpoint}/page/${page - 1}`, {
             params: {
               size: pageSize,
             },
           })
-        : tokenAxios.get(`${endpoint}/search/${page - 1}`, {
+        : tokenAxios.get(`${fetchUrl || endpoint}/search/${page - 1}`, {
             params: {
               size: pageSize,
               name: searchValue,
@@ -219,7 +221,7 @@ export const DashboardTable = ({
 
   useEffect(() => {
     fetchData()
-  }, [page, pageSize, searchValue])
+  }, [page, pageSize, searchValue, fetchUrl])
 
   return (
     <>
@@ -227,7 +229,7 @@ export const DashboardTable = ({
         title={title}
         className="justify-end"
         extra={[
-          <div className="flex " key="search">
+          <div className="flex" key="search">
             <Search placeholder="Buscar" allowClear onSearch={onSearch} />
             <Tooltip title="Agregar">
               <Button
@@ -249,7 +251,9 @@ export const DashboardTable = ({
       >
         <Table
           rowKey={rowKey}
-          columns={tableColumns}
+          columns={tableColumns.filter(
+            (tbcolumn) => tbcolumn.hideRender !== true,
+          )}
           dataSource={data}
           pagination={{
             //   simple: true,
@@ -273,7 +277,7 @@ export const DashboardTable = ({
         formInst={dialogForm}
         title={addMode ? 'Agregar' : 'Editar'}
         rowKey={rowKey}
-        columns={columns}
+        columns={columns.filter((tbcolumn) => tbcolumn.hideEdit !== true)}
         visible={visible}
         onAccept={onDialogAccept}
         onCancel={() =>
@@ -290,5 +294,6 @@ DashboardTable.propTypes = {
   columns: PropTypes.array.isRequired,
   actions: PropTypes.array,
   endpoint: PropTypes.string.isRequired,
+  fetchUrl: PropTypes.string,
   onAccept: PropTypes.func,
 }
