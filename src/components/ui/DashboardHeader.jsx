@@ -47,8 +47,8 @@ export const DashboardHeader = ({ collapsed, toggle }) => {
   const content = (
     <Card
       actions={[
-        <Tooltip title="Cambiar modo">
-          <SwitcherOutlined key="changue" />
+        <Tooltip title="Ir a reportes (en mantenimiento)">
+          <SwitcherOutlined key="changue" className="cursor-not-allowed" />
         </Tooltip>,
         <Tooltip title="Cerrar sesión">
           <LogoutOutlined key="logout" onClick={closeSession} />
